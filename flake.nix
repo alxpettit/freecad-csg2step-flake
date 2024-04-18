@@ -1,5 +1,5 @@
 {
-  description = "freecad-convert-shape script for flake.";
+  description = "freecad-convert-shape-cli script for flake.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
@@ -14,18 +14,18 @@
           inherit system;
           overlays = [ nuenv.overlays.nuenv ];  
         };
-        freecad-convert-shape = pkgs.writeShellScriptBin "freecad-convert-shape" ''
-          FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
+        freecad-convert-shape-cli = pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
+          FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
         '';
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ freecad-convert-shape ];
+          buildInputs = [ freecad-convert-shape-cli ];
         };
         apps = {
           default = {
             type = "app";
-            program = "${freecad-convert-shape}/bin/freecad-convert-shape";
+            program = "${freecad-convert-shape-cli}/bin/freecad-convert-shape-cli";
           };
         };
         defaultApp = self.apps.${system}.default;
