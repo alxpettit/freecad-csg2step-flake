@@ -25,6 +25,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Script's own directory
+script_dir=$(dirname "$0")
+
 # Array of supported formats
 formats=(stl off amf 3mf csg dxf svg pdf png echo ast term nef3 nefdbg)
 
@@ -40,7 +43,12 @@ for format in "${formats[@]}"; do
         if [ "$format" == "csg" ]; then
             step_output_file="${out_dir}/$(basename "$input_file" .scad).step"
             echo "Attempting to convert CSG to STEP..."
-            if ! ./freecad-convert-shape "$output_file" "$step_output_file"; then
+            if [ "${DYNAMIC_FREECAD}" = true ]; then
+                conversion_script="${script_dir}/freecad-convert-shape-dynamic"
+            else
+                conversion_script="${script_dir}/freecad-convert-shape-cli"
+            fi
+            if ! $conversion_script "$output_file" "$step_output_file"; then
                 echo "Failed to convert CSG to STEP"
             else
                 echo "CSG to STEP conversion successful."
