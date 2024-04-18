@@ -31,24 +31,24 @@ guiIsPossible = False
 freecadPattern = re.compile(r"FreeCAD(Cmd)?(\.exe)?$", re.IGNORECASE)
 freecadCmdPattern = re.compile(r"freecadcmd(\.exe)?$", re.IGNORECASE)
 if freecadPattern.search(sys.argv[0]):
-    if not freecadCmdPattern.search(sys.argv[0]):
-        hasGui = True
+    # if not freecadCmdPattern.search(sys.argv[0]):
+    #     hasGui = True
     # Remove freecad's path
     sys.argv.pop(0)
     # TODO: remove other arguments (-c, --console, etc) - workaround: do not use them
-else:
-    paths = [
-        "/usr/lib64/freecad/lib",
-        "C:/Program Files/FreeCAD 0.21/bin",
-        "C:/Program Files/FreeCAD 0.20/bin",
-        "C:/Program Files/FreeCAD 0.19/bin",
-        "C:/Program Files/FreeCAD 0.18/bin",
-    ]
-    for p in paths:
-        if os.path.exists(p):
-            FREECADPATH = p
-            break
-    guiIsPossible = True
+# else:
+    # paths = [
+    #     "/usr/lib64/freecad/lib",
+    #     "C:/Program Files/FreeCAD 0.21/bin",
+    #     "C:/Program Files/FreeCAD 0.20/bin",
+    #     "C:/Program Files/FreeCAD 0.19/bin",
+    #     "C:/Program Files/FreeCAD 0.18/bin",
+    # ]
+    # for p in paths:
+    #     if os.path.exists(p):
+    #         FREECADPATH = p
+    #         break
+    # guiIsPossible = True
 
 author = "MDW"
 FREECADPATH = ""
@@ -80,11 +80,11 @@ if oname[-5:] == ".iges":
     file_type = "iges"
 elif oname[-5:] == ".step":
     file_type = "step"
-    if guiIsPossible:
-        import FreeCADGui
+    # if guiIsPossible:
+    #     import FreeCADGui
 
-        FreeCADGui.showMainWindow()
-        hasGui = True
+    #     FreeCADGui.showMainWindow()
+    #     hasGui = True
 elif oname[-4:] == ".dae":
     file_type = "dae"
 elif oname[-4:] == ".wrl":
@@ -150,13 +150,10 @@ allObjects = []
 for o in App.ActiveDocument.RootObjects:
     # find root object and export the shape
     if len(o.InList) == 0 and hasattr(o, "Shape") and o.Visibility:
-        # print(o.__class__.__name__)
-        # print (o.Visibility)
         if data is None:
             data = o
         allObjects.append(o)
 
-# print(allObjects)
 
 # Transform meshes (not perfect, WIP)
 mesh = None
@@ -178,30 +175,14 @@ if data is not None and isMesh:
             segm = mesh.getSegment(i)
             for j in segm:
                 face_colors[j] = color
-    # mesh.write(Filename="new_example.obj", Material=face_colors, Format="obj")
 
-
-#
 # Generate the output
 if data is None:
     print("Error: can't find any object")
     sys.exit(1)
 else:
-    # print("Trying to write '{}'".format(oname))
     if file_type == "step":
         done = False
-        if hasGui:
-            # Try our best option first!
-            try:
-                import ImportGui
-
-                ImportGui.export(
-                    allObjects, name=oname, keepPlacement=True
-                )  # , legacy=True, keepPlacement=True, exportHidden=True)
-                done = True
-            except Exception as e:
-                print("export using ImportGui did not work", e)
-
         if not done:
             try:
                 data.Shape.exportStep(oname)

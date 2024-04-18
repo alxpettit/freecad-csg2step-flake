@@ -15,7 +15,7 @@
           overlays = [ nuenv.overlays.nuenv ];  
         };
         freecad-convert-shape = pkgs.writeShellScriptBin "freecad-convert-shape" ''
-          env FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad_convert_shape.py} $@
+          FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
         '';
       in
       {
