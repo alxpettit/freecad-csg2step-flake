@@ -5,7 +5,7 @@ let
       FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
     '';
   freecad-convert-shape-dynamic = pkgs.writeShellScriptBin "freecad-convert-shape-dynamic" ''
-      ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
+      FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
     '';
 
   openscad-convert-all = pkgs.writeShellScriptBin "openscad-export" (builtins.readFile
