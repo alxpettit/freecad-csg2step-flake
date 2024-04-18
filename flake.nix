@@ -22,6 +22,9 @@
         devShell = pkgs.mkShell {
           buildInputs = [ freecad-convert-shape-cli ];
         };
+        packages = {
+          default = freecad-convert-shape-cli;
+        };
         apps = {
           default = {
             type = "app";
