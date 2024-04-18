@@ -1,5 +1,5 @@
 {
-  description = "A Nix flake with a custom shell script";
+  description = "csg2step script for flake.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
@@ -12,8 +12,7 @@
         pkgs = import nixpkgs { inherit system; };
         csg2step = pkgs.writeShellScriptBin "csg2step" ''
           #!/usr/bin/env sh
-          ${pkgs.freecad}/bin/freecadcmd ${./freecad-csg2step.py} $@
-          echo 'uwu'
+          exec env FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-csg2step.py} $@
         '';
       in
       {
