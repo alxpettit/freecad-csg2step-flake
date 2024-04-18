@@ -9,13 +9,14 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
+        lib = pkgs.lib;
         pkgs = import nixpkgs {
           inherit system;
           # overlays = [ nuenv.overlays.nuenv ];  
         };
-        freecad-convert-shape-cli = pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
-          FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
-        '';
+        freecad-convert-shape-cli = ./pkg.nix {
+          inherit pkgs lib;
+        };
       in
       {
         devShell = pkgs.mkShell {

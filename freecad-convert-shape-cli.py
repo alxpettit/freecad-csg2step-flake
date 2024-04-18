@@ -50,9 +50,9 @@ if freecadPattern.search(sys.argv[0]):
     #         break
     # guiIsPossible = True
 
-author = "MDW"
+author = "unknown"
 FREECADPATH = ""
-company = "https://gist.github.com/d14274ac53b64f23d983b5fdabed8f9e"
+company = "unknown"
 if os.getenv("AUTHOR") is not None:
     author = os.getenv("AUTHOR")
 if os.getenv("COMPANY") is not None:
