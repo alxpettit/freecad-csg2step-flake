@@ -1,5 +1,5 @@
 {
-  description = "csg2step script for flake.";
+  description = "freecad-convert-shape script for flake.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
@@ -14,19 +14,23 @@
           inherit system;
           overlays = [ nuenv.overlays.nuenv ];  
         };
-        csg2step = pkgs.nuenv.writeScriptBin "csg2step.nu" ''
-          #!/usr/bin/env nu
-          FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-csg2step.py} $@
-        '';
+        freecad-convert-shape = pkgs.nuenv.writeScriptBin {
+          name = "freecad-convert-shape.nu";
+          script = ''
+            def freecad-convert-shape (input: path, output: path) {
+              env FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad_convert_shape.py} $input $output
+            }
+          '';
+        };
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ csg2step ];
+          buildInputs = [ freecad-convert-shape ];
         };
         apps = {
           default = {
             type = "app";
-            program = "${csg2step}/bin/csg2step";
+            program = "${freecad-convert-shape}/bin/freecad-convert-shape.nu";
           };
         };
         defaultApp = self.apps.${system}.default;
