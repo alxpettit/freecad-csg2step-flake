@@ -14,14 +14,9 @@
           inherit system;
           overlays = [ nuenv.overlays.nuenv ];  
         };
-        freecad-convert-shape = pkgs.nuenv.writeScriptBin {
-          name = "freecad-convert-shape.nu";
-          script = ''
-            def freecad-convert-shape (input: path, output: path) {
-              env FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad_convert_shape.py} $input $output
-            }
-          '';
-        };
+        freecad-convert-shape = pkgs.writeShellScriptBin "freecad-convert-shape" ''
+          env FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad_convert_shape.py} $@
+        '';
       in
       {
         devShell = pkgs.mkShell {
@@ -30,7 +25,7 @@
         apps = {
           default = {
             type = "app";
-            program = "${freecad-convert-shape}/bin/freecad-convert-shape.nu";
+            program = "${freecad-convert-shape}/bin/freecad-convert-shape";
           };
         };
         defaultApp = self.apps.${system}.default;
