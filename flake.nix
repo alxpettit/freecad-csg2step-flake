@@ -12,6 +12,7 @@
         pkgs = import nixpkgs { inherit system; };
         csg2step = pkgs.writeShellScriptBin "csg2step" ''
           #!/usr/bin/env sh
+          ${pkgs.freecad}/bin/freecadcmd ${./freecad-csg2step.py} $@
           echo 'uwu'
         '';
       in
