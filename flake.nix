@@ -4,15 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
-    nuenv.url = "github:DeterminateSystems/nuenv";
   };
 
-  outputs = { self, nixpkgs, flake-utils, nuenv, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ nuenv.overlays.nuenv ];  
+          # overlays = [ nuenv.overlays.nuenv ];  
         };
         freecad-convert-shape-cli = pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
           FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
