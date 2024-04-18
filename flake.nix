@@ -10,19 +10,19 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        demo-utility = pkgs.writeShellScriptBin "demo-utility" ''
+        csg2step = pkgs.writeShellScriptBin "csg2step" ''
           #!/usr/bin/env sh
           echo 'uwu'
         '';
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ demo-utility ];
+          buildInputs = [ csg2step ];
         };
         apps = {
           default = {
             type = "app";
-            program = "${demo-utility}/bin/demo-utility";
+            program = "${csg2step}/bin/csg2step";
           };
         };
         defaultApp = self.apps.${system}.default;
