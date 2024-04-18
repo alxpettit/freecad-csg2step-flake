@@ -8,8 +8,8 @@ let
       ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
     '';
 
-  openscad-convert-all = pkgs.writeShellScriptBin "openscad-convert-all" (builtins.readFile
-      ./openscad-export-all);
+  openscad-convert-all = pkgs.writeShellScriptBin "openscad-export" (builtins.readFile
+      ./openscad-export);
 
 in
 pkgs.symlinkJoin {
