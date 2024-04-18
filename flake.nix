@@ -14,7 +14,7 @@
           inherit system;
           # overlays = [ nuenv.overlays.nuenv ];  
         };
-        freecad-convert-shape-cli = ./pkg.nix {
+        freecad-convert-shape-cli = import ./pkg.nix {
           inherit pkgs lib;
         };
       in
