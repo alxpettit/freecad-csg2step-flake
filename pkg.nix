@@ -1,17 +1,22 @@
 { pkgs, lib }:
 let
-  paths = [
-    (pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
+  
+  freecad-convert-shape-cli = pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
       FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
-    '')
-    (pkgs.writeShellScriptBin "freecad-convert-shape" ''
-      FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
-    '')
-  ];
+    '';
+  freecad-convert-shape-dynamic = pkgs.writeShellScriptBin "freecad-convert-shape-dynamic" ''
+      ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
+    '';
+
+  openscad-convert-all = pkgs.writeShellScriptBin "openscad-convert-all" builtins.loadFile
+      ./openscad-export-all;
 
 in
 pkgs.symlinkJoin {
   name = "modeling-helpers";
   meta.mainProgram = "freecad-convert-shape-cli";
-  inherit paths;
+  paths = [
+    freecad-convert-shape-cli
+    freecad-convert-shape-dynamic
+  ];
 }

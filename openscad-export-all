@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Check if a file argument is given
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <file.scad>"
+    exit 1
+fi
+
+input_file="$1"
+
+# Check if the file exists
+if [ ! -f "$input_file" ]; then
+    echo "Error: File does not exist."
+    exit 1
+fi
+
+# Extract directory from the input file path
+dir=$(dirname "$input_file")
+
+# Create output directory
+out_dir="${dir}/out"
+mkdir -p "$out_dir"
+if [ $? -ne 0 ]; then
+    echo "Failed to create output directory."
+    exit 1
+fi
+
+# Array of supported formats
+formats=(stl off amf 3mf csg dxf svg pdf png echo ast term nef3 nefdbg)
+
+# Convert to each format
+for format in "${formats[@]}"; do
+    output_file="${out_dir}/$(basename "$input_file" .scad).${format}"
+    echo "Exporting to ${format}..."
+    if ! openscad -o "$output_file" -D "output_format=\"${format}\"" "$input_file"; then
+        echo "Failed to export ${format}"
+    else
+        echo "${format} export completed successfully."
+        # If the format is CSG, attempt to convert to STEP
+        if [ "$format" == "csg" ]; then
+            step_output_file="${out_dir}/$(basename "$input_file" .scad).step"
+            echo "Attempting to convert CSG to STEP..."
+            if ! ./freecad-convert-shape "$output_file" "$step_output_file"; then
+                echo "Failed to convert CSG to STEP"
+            else
+                echo "CSG to STEP conversion successful."
+            fi
+        fi
+    fi
+done
+
+echo "All done. Check your '${out_dir}' directory for the outputs."
+
