@@ -78,8 +78,8 @@ fn main() -> Result<()> {
         .status()
     {
         Ok(status) if status.success() => (),
-        Ok(_) => {
-            eprintln!("Python script execution failed.");
+        Ok(status) => {
+            eprintln!("Python script execution failed: {}", status);
             exit(1);
         }
         Err(e) => {
