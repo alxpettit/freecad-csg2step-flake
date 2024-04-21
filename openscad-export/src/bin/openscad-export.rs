@@ -102,6 +102,7 @@ fn main() -> Result<()> {
                 println!("Attempting to convert Csg to Step...");
                 let output = Command::new("freecad-convert-shape-cli")
                     .arg(&output_file)
+                    .arg("-o")
                     .arg(&step_output_file)
                     .output()
                     .with_context(|| "Failed to convert Csg to Step")?;
