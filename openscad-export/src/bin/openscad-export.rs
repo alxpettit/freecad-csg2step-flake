@@ -1,5 +1,6 @@
 use anyhow::{Context, Result};
 use clap::{ArgGroup, Parser, ValueEnum};
+use env_logger::Env;
 use log::warn;
 use std::{cmp::Ordering, fs, process::Command};
 use strum::IntoEnumIterator;
@@ -61,8 +62,7 @@ impl Ord for Format {
 }
 
 fn main() -> Result<()> {
-    env_logger::init();
-
+    env_logger::Builder::from_env(Env::default().default_filter_or("warn")).init();
     let args = Args::parse();
 
     if !args.input_file.exists() {

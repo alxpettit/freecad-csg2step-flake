@@ -1,4 +1,5 @@
 use clap::{ArgGroup, Parser};
+use env_logger::Env;
 use log::info;
 use std::env;
 use std::path::Path;
@@ -18,12 +19,12 @@ struct Cli {
 }
 
 fn main() {
-    env_logger::init();
+    env_logger::Builder::from_env(Env::default().default_filter_or("warn")).init();
     let cli = Cli::parse();
 
     // Check if the input file exists
     if !Path::new(&cli.input).exists() {
-        eprintln!("Error: Input file '{}' does not exist.", cli.input);
+        eprintln!("Error: Input file `{}` does not exist.", cli.input);
         exit(1);
     }
 
