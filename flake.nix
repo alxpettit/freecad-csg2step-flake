@@ -14,21 +14,29 @@
           inherit system;
           # overlays = [ nuenv.overlays.nuenv ];  
         };
-        freecad-convert-shape = import ./pkg.nix {
+        pkg = import ./pkg.nix {
           inherit pkgs lib;
         };
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ freecad-convert-shape ];
+          buildInputs = [ pkg ];
         };
         packages = {
-          default = freecad-convert-shape;
+          default = pkg;
         };
-        apps = {
-          default = {
+        apps = let
+          freecad-convert-shape = {
             type = "app";
-            program = "${freecad-convert-shape}/bin/freecad-convert-shape-cli";
+            program = "${pkg}/bin/freecad-convert-shape";
+          };
+
+        in {
+          inherit freecad-convert-shape;
+          default = freecad-convert-shape;
+          openscad-export = {
+            type = "app";
+            program = "${pkg}/bin/openscad-export";
           };
         };
         defaultApp = self.apps.${system}.default;

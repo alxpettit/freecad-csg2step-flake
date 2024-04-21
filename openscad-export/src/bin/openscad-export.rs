@@ -13,6 +13,8 @@ struct Args {
     formats: Option<Vec<Format>>,
     #[clap(value_parser)]
     input_file: std::path::PathBuf,
+    #[clap(value_parser)]
+    output_path: Option<std::path::PathBuf>,
     #[clap(help = "Selects all available formats")]
     #[clap(short, long)]
     all_formats: bool,
@@ -26,6 +28,7 @@ enum Format {
     Stl,
     Off,
     Amf,
+    #[clap(name = "3mf")]
     Threemf,
     Csg,
     Step,
@@ -78,7 +81,9 @@ fn main() -> Result<()> {
         formats.push(Format::Csg);
     }
 
-    let out_dir = args.input_file.with_file_name("converted");
+    let out_dir = args
+        .output_path
+        .unwrap_or(args.input_file.with_file_name("converted"));
     fs::create_dir_all(&out_dir).with_context(|| "Failed to create output directory.")?;
 
     // IMPORTANT -- sort formats before using
