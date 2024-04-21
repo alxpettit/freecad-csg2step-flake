@@ -14,12 +14,12 @@ struct Args {
     formats: Option<Vec<Format>>,
     #[clap(value_parser)]
     input_file: std::path::PathBuf,
-    #[clap(value_parser)]
+    #[clap(short, long, value_parser)]
     output_path: Option<std::path::PathBuf>,
-    #[clap(help = "Selects all available formats")]
+    /// Selects all available formats
     #[clap(short, long)]
     all_formats: bool,
-    #[clap(help = "Shortcut for selecting Step format")]
+    /// Shortcut for selecting Step format
     #[clap(short, long)]
     step: bool,
 }
