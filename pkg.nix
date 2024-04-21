@@ -1,10 +1,10 @@
 { pkgs, lib }:
 let
   
-  freecad-convert-shape-cli = pkgs.writeShellScriptBin "freecad-convert-shape-cli" ''
+  freecad-convert-shape-cli = pkgs.writeShellScriptBin "raw-freecad-convert-shape-cli" ''
       FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape-cli.py} "$@"
     '';
-  freecad-convert-shape-dynamic = pkgs.writeShellScriptBin "freecad-convert-shape-dynamic" ''
+  freecad-convert-shape-dynamic = pkgs.writeShellScriptBin "raw-freecad-convert-shape-dynamic" ''
       FREECADPATH=${pkgs.freecad} ${pkgs.freecad}/bin/freecadcmd ${./freecad-convert-shape.py} "$@"
     '';
 

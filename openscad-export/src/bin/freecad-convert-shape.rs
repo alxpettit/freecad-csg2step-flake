@@ -1,11 +1,12 @@
 use clap::{ArgGroup, Parser};
+use log::info;
+use std::env;
 use std::path::Path;
 use std::process::{exit, Command};
 
 /// Wrapper around a Python script to convert CSG files to STEP format
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
-#[clap(group(ArgGroup::new("file_paths").required(true).args(&["input", "output"])))]
 struct Cli {
     /// Input CSG file
     #[clap(value_parser)]
@@ -17,6 +18,7 @@ struct Cli {
 }
 
 fn main() {
+    env_logger::init();
     let cli = Cli::parse();
 
     // Check if the input file exists
@@ -25,9 +27,17 @@ fn main() {
         exit(1);
     }
 
-    // Call the Python script
-    match Command::new("python")
-        .arg("script.py")
+    let freecad_dynamic = env::var("FREECAD_DYNAMIC").unwrap_or(String::from("false"));
+
+    let freecad_convert_cmd = if freecad_dynamic == "true" {
+        "freecad-convert-shape-dynamic"
+    } else {
+        "freecad-convert-shape-cli"
+    };
+
+    info!("Calling child process: {}", &freecad_convert_cmd);
+
+    match Command::new(freecad_convert_cmd)
         .arg(cli.input)
         .arg(cli.output)
         .status()
