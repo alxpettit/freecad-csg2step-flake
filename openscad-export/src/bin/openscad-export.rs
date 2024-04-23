@@ -100,7 +100,7 @@ fn main() -> Result<()> {
                     .join(args.input_file.file_stem().unwrap())
                     .with_extension("step");
                 println!("Attempting to convert Csg to Step...");
-                let output = Command::new("freecad-convert-shape-cli")
+                let output = Command::new("freecad-convert-shape")
                     .arg(&output_file)
                     .arg("-o")
                     .arg(&step_output_file)
